@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.RemoteViews;
+import android.os.Build;
 
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -109,7 +110,13 @@ public class FlutterForegroundPlugin implements MethodCallHandler {
         intent.putExtra("stop_icon", stopIcon);
         intent.putExtra("stop_text", stopText);
 
-        activity.startService(intent);
+        //activity.startService(intent);
+        //https://developer.android.google.cn/guide/components/services?hl=en#StartingAService
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            activity.startForegroundService(intent);
+        }else{
+            activity.startService(intent);
+        }
         serviceStarted = true;
         startServiceLoop();
 
