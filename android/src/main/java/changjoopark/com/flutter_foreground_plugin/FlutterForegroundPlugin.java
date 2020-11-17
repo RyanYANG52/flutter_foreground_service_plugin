@@ -61,7 +61,7 @@ public class FlutterForegroundPlugin implements MethodCallHandler {
                         final String stopIcon = call.argument("stop_icon");
                         final String stopText = call.argument("stop_text");
 
-                        launchForegroundService(icon, color, title, content, subtext, chronometer, stopAction, stopIcon, stopText);
+                        launchForegroundService(icon, color, title, content, subtext, chronometer, holdWakeLock, stopAction, stopIcon, stopText);
                         result.success("startForegroundService");
                         break;
                     case "stopForegroundService":
@@ -96,7 +96,7 @@ public class FlutterForegroundPlugin implements MethodCallHandler {
     }
 
     private void launchForegroundService(String icon, int color, String title, String content, String subtext,
-                                         Boolean chronometer, Boolean stopAction, String stopIcon,
+                                         Boolean chronometer, Boolean holdWakeLock, Boolean stopAction, String stopIcon,
                                          String stopText) {
         Intent intent = new Intent(activity, FlutterForegroundService.class);
         intent.setAction(START_FOREGROUND_ACTION);
@@ -106,6 +106,7 @@ public class FlutterForegroundPlugin implements MethodCallHandler {
         intent.putExtra("content", content);
         intent.putExtra("subtext", subtext);
         intent.putExtra("chronometer", chronometer);
+        intent.putExtra("holdWakeLock", holdWakeLock);
         intent.putExtra("stop_action", stopAction);
         intent.putExtra("stop_icon", stopIcon);
         intent.putExtra("stop_text", stopText);

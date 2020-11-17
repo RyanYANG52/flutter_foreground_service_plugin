@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.PowerManager;
 
 import androidx.core.app.NotificationCompat;
 
@@ -18,8 +19,10 @@ public class FlutterForegroundService extends Service {
     public static int ONGOING_NOTIFICATION_ID = 1;
     public static final String NOTIFICATION_CHANNEL_ID = "CHANNEL_ID";
     public static final String ACTION_STOP_SERVICE = "STOP";
+    public static final String WAKELOCK_TAG = "FlutterForegroundService::WakeLock";
 
     private boolean userStopForegroundService = false;
+    private PowerManager.WakeLock wl = null;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -71,6 +74,13 @@ public class FlutterForegroundService extends Service {
                     builder.setSubText(bundle.getString("subtext"));
                 }
 
+                if (bundle.getBoolean("holdWakeLock")) {
+                    PowerManager powerManager =((PowerManager) getSystemService(POWER_SERVICE));
+                    wl = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_TAG);
+                    wl.acquire();
+                    android.util.Log.d("FlutterForegroundService", "WAKE_LOCK acquired");
+                }
+
                 startForeground(ONGOING_NOTIFICATION_ID, builder.build());
                 break;
             case FlutterForegroundPlugin.STOP_FOREGROUND_ACTION:
@@ -109,6 +119,11 @@ public class FlutterForegroundService extends Service {
 
     private void stopFlutterForegroundService() {
         userStopForegroundService = true;
+        if (wl != null){
+            android.util.Log.d("FlutterForegroundService", "WAKE_LOCK released");
+            wl.release();
+            wl = null;
+        }
         stopForeground(true);
         stopSelf();
     }

@@ -53,7 +53,7 @@ void startForegroundService() async {
   await FlutterForegroundPlugin.setServiceMethodInterval(seconds: 5);
   await FlutterForegroundPlugin.setServiceMethod(globalForegroundService);
   await FlutterForegroundPlugin.startForegroundService(
-    holdWakeLock: false,
+    holdWakeLock: true,
     onStarted: () {
       print("Foreground on Started");
     },
