@@ -21,7 +21,7 @@ class FlutterForegroundPlugin {
     Function onStarted,
     Function onStopped,
     String channelName,
-    @required String iconName,
+    String iconName,
     int color = 0,
     @required String title,
     String content = "",

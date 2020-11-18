@@ -50,6 +50,7 @@ public class FlutterForegroundService extends Service {
                     ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
                             .createNotificationChannel(channel);
                 }
+
                 NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
                         .setSmallIcon(getNotificationIcon(bundle.getString("icon")))
                         .setColor(bundle.getInt("color"))
@@ -114,8 +115,11 @@ public class FlutterForegroundService extends Service {
     }
 
     private int getNotificationIcon(String iconName) {
-        int resourceId = getApplicationContext().getResources().getIdentifier(iconName, "drawable", getApplicationContext().getPackageName());
-        return resourceId;
+        if(iconName != null){
+            return getApplicationContext().getResources().getIdentifier(iconName, "drawable", getApplicationContext().getPackageName());
+        }else{
+            return getApplicationContext().getResources().getIdentifier("ic_launcher", "mipmap", getApplicationContext().getPackageName());
+        }
     }
 
     private void stopFlutterForegroundService() {

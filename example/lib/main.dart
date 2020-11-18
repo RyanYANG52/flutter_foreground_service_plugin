@@ -63,7 +63,6 @@ void startForegroundService() async {
     },
     title: "Flutter Foreground Service",
     content: "This is Content",
-    iconName: "ic_stat_hot_tub",
   );
 }
 
