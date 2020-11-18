@@ -1,7 +1,7 @@
 # Changes
 1. use startForegroundService if version O or higher
 2. add wakelock implementation
-3. add channelName option
+3. add channelName and channelId option
 4. use default app icon if iconName is not set
 
 # flutter_foreground_service_plugin

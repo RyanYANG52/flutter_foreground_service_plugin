@@ -17,7 +17,6 @@ import androidx.core.app.NotificationCompat;
 
 public class FlutterForegroundService extends Service {
     public static int ONGOING_NOTIFICATION_ID = 1;
-    public static final String NOTIFICATION_CHANNEL_ID = "CHANNEL_ID";
     public static final String ACTION_STOP_SERVICE = "STOP";
     public static final String WAKELOCK_TAG = "FlutterForegroundService::WakeLock";
 
@@ -41,9 +40,10 @@ public class FlutterForegroundService extends Service {
 
                 Bundle bundle = intent.getExtras();
 
+                String channelId = bundle.getString("channelId");
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID,
-                            //"flutter_foreground_service_channel",
+                    NotificationChannel channel = new NotificationChannel(channelId,
                             bundle.getString("channelName"),
                             NotificationManager.IMPORTANCE_HIGH);
 
@@ -51,7 +51,7 @@ public class FlutterForegroundService extends Service {
                             .createNotificationChannel(channel);
                 }
 
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(getNotificationIcon(bundle.getString("icon")))
                         .setColor(bundle.getInt("color"))
                         .setContentTitle(bundle.getString("title"))
@@ -115,7 +115,7 @@ public class FlutterForegroundService extends Service {
     }
 
     private int getNotificationIcon(String iconName) {
-        if(iconName != null){
+        if(iconName != null && !iconName.isEmpty()){
             return getApplicationContext().getResources().getIdentifier(iconName, "drawable", getApplicationContext().getPackageName());
         }else{
             return getApplicationContext().getResources().getIdentifier("ic_launcher", "mipmap", getApplicationContext().getPackageName());

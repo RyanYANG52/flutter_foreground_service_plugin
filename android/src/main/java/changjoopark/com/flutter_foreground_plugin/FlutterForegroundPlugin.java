@@ -52,6 +52,7 @@ public class FlutterForegroundPlugin implements MethodCallHandler {
                     case "startForegroundService":
                         final Boolean holdWakeLock = call.argument("holdWakeLock");
                         final String channelName = call.argument("channelName");
+                        final String channelId = call.argument("channelId");
                         final String icon = call.argument("icon");
                         final int color = call.argument("color");
                         final String title = call.argument("title");
@@ -62,7 +63,7 @@ public class FlutterForegroundPlugin implements MethodCallHandler {
                         final String stopIcon = call.argument("stop_icon");
                         final String stopText = call.argument("stop_text");
 
-                        launchForegroundService(channelName, icon, color, title, content, subtext, chronometer, holdWakeLock, stopAction, stopIcon, stopText);
+                        launchForegroundService(channelName, channelId, icon, color, title, content, subtext, chronometer, holdWakeLock, stopAction, stopIcon, stopText);
                         result.success("startForegroundService");
                         break;
                     case "stopForegroundService":
@@ -96,12 +97,13 @@ public class FlutterForegroundPlugin implements MethodCallHandler {
         }
     }
 
-    private void launchForegroundService(String channelName, String icon, int color, String title, String content, String subtext,
+    private void launchForegroundService(String channelName, String channelId, String icon, int color, String title, String content, String subtext,
                                          Boolean chronometer, Boolean holdWakeLock, Boolean stopAction, String stopIcon,
                                          String stopText) {
         Intent intent = new Intent(activity, FlutterForegroundService.class);
         intent.setAction(START_FOREGROUND_ACTION);
         intent.putExtra("channelName", channelName);
+        intent.putExtra("channelId", channelId);
         intent.putExtra("icon", icon);
         intent.putExtra("color", color);
         intent.putExtra("title", title);
