@@ -20,6 +20,7 @@ class FlutterForegroundPlugin {
     bool holdWakeLock = false,
     Function onStarted,
     Function onStopped,
+    String channelName,
     @required String iconName,
     int color = 0,
     @required String title,
@@ -38,8 +39,13 @@ class FlutterForegroundPlugin {
       onStoppedMethod = onStopped;
     }
 
+    if(channelName?.isEmpty != false){
+      channelName = "flutter_foreground_service_channel";
+    }
+
     await _mainChannel.invokeMethod("startForegroundService", <String, dynamic>{
       'holdWakeLock': holdWakeLock,
+      'channelName': channelName,
       'icon': iconName,
       'color': color,
       'title': title,
